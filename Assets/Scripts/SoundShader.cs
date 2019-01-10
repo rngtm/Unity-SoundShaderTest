@@ -22,7 +22,7 @@ public class SoundShader : MonoBehaviour
         soundTexture = new Texture2D(soundRT.width, soundRT.height);
     }
 
-    void Update()
+    void FixedUpdate()
     {
         UpdateBuffer();
     }
