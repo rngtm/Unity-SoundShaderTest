@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Random = System.Random;
 
@@ -74,5 +75,10 @@ public class SoundShader : MonoBehaviour
                 bufferReadPos = 0;
             }
         }
+    }
+
+    public void SetMaterial(Material material)
+    {
+        soundMaterial = material;
     }
 }

@@ -50,6 +50,7 @@ namespace ShaderGraphGenerator
                 // {
                 //     EditorApplication.ExecuteMenuItem("Assets/Create/Folder");
                 // }
+
                 // generate data
                 if (GUILayout.Button(GenerateButtonContent, m_ButtonStyle))
                 {
@@ -117,13 +118,21 @@ namespace ShaderGraphGenerator
             var templateScenePath = AssetDatabase.GetAssetPath(m_GeneratorSettings.TemplateScene);
             var newScenePath = Path.Combine(rootFolderPath, fileName) + ".unity";
             AssetDatabase.CopyAsset(templateScenePath, newScenePath);
+            var newScene = EditorSceneManager.OpenScene(newScenePath, OpenSceneMode.Additive);
 
             // bind Material to MeshRenderer
-            var newScene = EditorSceneManager.OpenScene(newScenePath, OpenSceneMode.Additive);
             var meshRenderer = newScene.GetRootGameObjects()
                 .Select(go => go.GetComponent<MeshRenderer>())
                 .FirstOrDefault(mr => mr != null);
             if (meshRenderer != null) { meshRenderer.material = newMaterial; }
+
+            // bind Material to SoundShader
+            var soundShader = newScene.GetRootGameObjects()
+                .Select(go => go.GetComponent<SoundShader>())
+                .FirstOrDefault(ss => ss != null);
+            if (soundShader != null) { soundShader.SetMaterial(newMaterial); }
+
+            // save
             EditorSceneManager.SaveScene(newScene);
             EditorSceneManager.CloseScene(newScene, true);
 
